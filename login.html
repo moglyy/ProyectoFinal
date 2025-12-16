@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Tacos Chiapas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div style="max-width: 400px; margin: 100px auto; padding: 20px;">
+        <h1>🔑 Iniciar Sesión</h1>
+        <form action="/login" method="POST">
+            <label for="nombre_usuario">Nombre de usuario:</label>
+            <input type="text" id="nombre_usuario" name="nombre_usuario" required>
+            
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
+            
+            <button type="submit">Ingresar</button>
+        </form>
+        
+        <p>¿No tienes cuenta? <a href="/registro.html">Regístrate aquí</a></p>
+        <button onclick="window.location.href='/'">Volver al inicio</button>
+    </div>
+</body>
+</html>
