@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tacos Chiapas - Menú Digital</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .hero {
+            background: linear-gradient(to right, #9777f0, #b88bec);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .feature-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .feature {
+            flex: 1;
+            min-width: 200px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #b97de0;
+        }
+        .btn {
+            display: inline-block;
+            background: #af83e9;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #7935b1;
+        }
+        .btn-secondary {
+            background: #ce79f0;
+        }
+        .btn-secondary:hover {
+            background: #c580da;
+        }
+        .user-info {
+            background: #9438d1;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .promo-banner {
+            background: #f39c12;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="navbar"></div>
+
+    <div class="hero">
+        <h1> ¡Bienvenido a Tacos Chiapas! </h1>
+        <p>Tu taquería favorita ahora con menú digital y programa de cliente frecuente</p>
+    </div>
+
+    <div id="user-welcome" style="display:none;" class="user-info">
+        <h2>¡Hola, <span id="user-name"></span>!</h2>
+        <p>Compras realizadas: <span id="user-compras">0</span></p>
+        <p id="recompensa-message"></p>
+    </div>
+
+    <div class="promo-banner">
+        <h3>🎉 PROMOCIÓN DEL MES 🎉</h3>
+        <p><strong>Martes y Jueves: 2x1 en tacos al pastor</strong></p>
+        <p>Válido solo para consumo en el establecimiento</p>
+    </div>
+
+    <div class="card">
+        <h2>📋 Menú Digital</h2>
+        <p>Consulta nuestro menú completo, precios actualizados.</p>
+        <button class="btn" onclick="window.location.href='/menu'">Ver Menú Completo</button>
+    </div>
+
+    <div id="cliente-content" style="display:none;">
+        <div class="card">
+            <h2>⭐ Programa Cliente Frecuente</h2>
+            <p>Por cada 8 compras mayores a $100, ganas un combo GRATIS</p>
+            <button class="btn" onclick="window.location.href='/mi-perfil'">Mi Perfil y Recompensas</button>
+        </div>
+    </div>
+
+    <div id="empleado-content" style="display:none;">
+        <div class="card">
+            <h2> Panel de Empleado</h2>
+            <p>Funciones específicas para el personal del establecimiento</p>
+            <button class="btn" onclick="window.location.href='/empleado-panel'">Acceder al Panel</button>
+        </div>
+    </div>
+
+    <div id="admin-content" style="display:none;">
+        <div class="card">
+            <h2>Panel de Administración</h2>
+            <p>Gestiona el menú, usuarios, empleados y estadísticas del negocio</p>
+            <button class="btn" onclick="window.location.href='/admin-panel'">Acceder al Panel Admin</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>🏪 Información del Establecimiento</h2>
+        <p><strong>📍 Ubicación:</strong> Ave. ITR Tijuana s/n, Mesa de Otay, C.P. 22430</p>
+        <p><strong>📅 Horarios:</strong> Lunes a Domingo: 10:00 AM - 10:00 PM</p>
+        <p><strong>📞 Contacto:</strong> (664) 123-4567</p>
+        <button class="btn" onclick="window.location.href='/informacion'">Más Información</button>
+    </div>
+
+    <h2>🌟 Características del Sistema</h2>
+    <div class="feature-list">
+        <div class="feature">
+            <h3>📱 Menú Digital</h3>
+            <p>Consulta actualizaciones en tiempo real, sin necesidad de imprimir</p>
+        </div>
+        <div class="feature">
+            <h3>⭐ Cliente Frecuente</h3>
+            <p>Acumula compras y gana recompensas automáticamente</p>
+        </div>
+        <div class="feature">
+            <h3>👨‍💼 Gestión Integral</h3>
+            <p>Panel administrativo para gestión completa del negocio</p>
+        </div>
+    </div>
+
+    <hr>
+
+    <script>
+        // Cargar navbar
+        fetch('/navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar').innerHTML = data;
+                return fetch('/tipo-usuario');
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('No autenticado');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const menu = document.getElementById('menu');
+                if (!menu) return;
+
+                const tipoUsuario = data.tipo_usuario;
+                const userWelcome = document.getElementById('user-welcome');
+
+          
+
+                // Mostrar bienvenida personalizada si está logueado
+                fetch('/user-info')
+                    .then(res => res.json())
+                    .then(userData => {
+                        document.getElementById('user-name').textContent = userData.nombre || 'Usuario';
+                        document.getElementById('user-compras').textContent = userData.compras_realizadas || 0;
+                        
+                        // Mensaje de recompensa
+                        const recompensaMsg = document.getElementById('recompensa-message');
+                        if (userData.compras_realizadas >= 8) {
+                            recompensaMsg.textContent = '🎉 ¡Tienes un combo gratis disponible!';
+                            recompensaMsg.style.color = '#2ecc71';
+                            recompensaMsg.style.fontWeight = 'bold';
+                        } else {
+                            const faltan = 8 - (userData.compras_realizadas % 8);
+                            recompensaMsg.textContent = `Te faltan ${faltan} compras para tu próximo combo gratis`;
+                        }
+                        
+                        userWelcome.style.display = 'block';
+                    })
+                    .catch(err => {
+                        console.log('No hay usuario logueado o error al obtener datos');
+                    });
+
+                // Mostrar contenido según tipo de usuario
+                if (tipoUsuario === 'admin') {
+                    document.getElementById('admin-content').style.display = 'block';
+                    document.getElementById('empleado-content').style.display = 'block';
+                    document.getElementById('cliente-content').style.display = 'block';
+                    
+                    // Agregar opciones de menú para admin
+                    menu.innerHTML += '<li><a href="/admin-panel">Panel Administrativo</a></li>';
+                    menu.innerHTML += '<li><a href="/empleado-panel">Panel Empleado</a></li>';
+                    menu.innerHTML += '<li><a href="/menu">Ver Menú</a></li>';
+                    menu.innerHTML += '<li><a href="/mi-perfil">Mi Perfil</a></li>';
+                    
+                } else if (tipoUsuario === 'empleado') {
+                    document.getElementById('empleado-content').style.display = 'block';
+                    document.getElementById('cliente-content').style.display = 'block';
+                    
+                    // Agregar opciones de menú para empleado
+                    menu.innerHTML += '<li><a href="/empleado-panel">Panel Empleado</a></li>';
+                    menu.innerHTML += '<li><a href="/menu">Ver Menú</a></li>';
+                    menu.innerHTML += '<li><a href="/mi-perfil">Mi Perfil</a></li>';
+                    
+                } else if (tipoUsuario === 'cliente') {
+                    document.getElementById('cliente-content').style.display = 'block';
+                    
+                    // Agregar opciones de menú para cliente
+                    menu.innerHTML += '<li><a href="/menu">Ver Menú</a></li>';
+                    menu.innerHTML += '<li><a href="/mi-perfil">Mi Perfil</a></li>';
+                }
+                
+                // Enlace de logout para todos los usuarios autenticados
+                menu.innerHTML += '<li><a href="/logout">Cerrar Sesión</a></li>';
+            })
+            .catch(error => {
+                console.log('Usuario no autenticado, mostrando opciones públicas');
+                const menu = document.getElementById('menu');
+                if (menu) {
+                    menu.innerHTML += '<li><a href="/login.html">Iniciar Sesión</a></li>';
+                    menu.innerHTML += '<li><a href="/registro.html">Registrarse</a></li>';
+                    menu.innerHTML += '<li><a href="/menu">Ver Menú (Público)</a></li>';
+                    menu.innerHTML += '<li><a href="/informacion">Información</a></li>';
+                }
+            });
+
+        // Añadir la ruta /user-info al server.js para obtener información del usuario
+        // Agrega esto a tu server.js:
+        /*
+        app.get('/user-info', requireLogin, (req, res) => {
+            res.json({
+                nombre: req.session.user.nombre,
+                compras_realizadas: req.session.user.compras_realizadas || 0,
+                tipo_usuario: req.session.user.tipo_usuario
+            });
+        });
+        */
+    </script>
+
+</body>
+</html>
